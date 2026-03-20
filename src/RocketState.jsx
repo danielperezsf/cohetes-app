@@ -180,18 +180,21 @@ export default function RocketState({ state = 'mid', size = 90 }) {
     if (!el) return
     gsap.killTweensOf(el)
 
-    if (state === 'high') {
-      gsap.to(el, { opacity: 0.55, duration: 1.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
-    } else if (state === 'low') {
-      gsap.to(el, { opacity: 0.2,  duration: 1.8, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    if (state === 'low') {
+      // Rojo: parpadeo rápido de emergencia
+      gsap.fromTo(el, { opacity: 0.25 }, { opacity: 0.9, duration: 0.6, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    } else if (state === 'mid') {
+      // Amarillo: pulso moderado, precaución
+      gsap.fromTo(el, { opacity: 0.45 }, { opacity: 0.95, duration: 1.1, yoyo: true, repeat: -1, ease: 'sine.inOut' })
     } else {
-      gsap.set(el, { opacity: 1 })
+      // Verde: brillo suave y estable
+      gsap.fromTo(el, { opacity: 0.7 }, { opacity: 1, duration: 1.8, yoyo: true, repeat: -1, ease: 'sine.inOut' })
     }
 
     return () => gsap.killTweensOf(el)
   }, [state])
 
-  const windowFill = state === 'low' ? '#5F5E5A' : '#185FA5'
+  const windowFill = state === 'low' ? '#CC1111' : state === 'mid' ? '#CC9900' : '#0E8C3A'
 
   return (
     <div style={{
@@ -320,8 +323,8 @@ export default function RocketState({ state = 'mid', size = 90 }) {
 
         {/* porthole glass con ref para glow */}
         <circle ref={windowRef} cx="45" cy="90" r="15" fill={windowFill} />
-        <ellipse cx="40" cy="84" rx="5"   ry="3.5" fill="#378ADD" opacity=".5"  transform="rotate(-30,40,84)" />
-        <ellipse cx="50" cy="97" rx="3"   ry="2"   fill="#0C447C" opacity=".35" transform="rotate(-30,50,97)" />
+        <ellipse cx="40" cy="84" rx="5"   ry="3.5" fill={state === 'low' ? '#FF6666' : state === 'mid' ? '#FFE066' : '#4DCC7A'} opacity=".5"  transform="rotate(-30,40,84)" />
+        <ellipse cx="50" cy="97" rx="3"   ry="2"   fill={state === 'low' ? '#880000' : state === 'mid' ? '#886600' : '#065C26'} opacity=".35" transform="rotate(-30,50,97)" />
         {state === 'high' && (
           <ellipse cx="39" cy="82" rx="3" ry="2"   fill="#fff"    opacity=".3"  transform="rotate(-35,39,82)" />
         )}
