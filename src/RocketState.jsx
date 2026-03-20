@@ -159,16 +159,10 @@ export default function RocketState({ state = 'mid', size = 90 }) {
         .to(el, { rotation: -5, y:  1, duration: 0.24, ease: 'power1.inOut' })
 
     } else if (state === 'mid') {
-      // Float suave, neutral
-      bodyTw.current = gsap.to(el, {
-        y               : -3,
-        rotation        : 0.6,
-        duration        : 3.2,
-        yoyo            : true,
-        repeat          : -1,
-        ease            : 'sine.inOut',
-        transformOrigin : '45px 95px',
-      })
+      // Float con empuje moderado
+      bodyTw.current = gsap.timeline({ repeat: -1 })
+        .to(el, { y: -6, rotation:  1.2, duration: 1.8, ease: 'sine.inOut', transformOrigin: '45px 95px' })
+        .to(el, { y:  2, rotation: -0.8, duration: 2.0, ease: 'sine.inOut' })
 
     } else {
       // Bob energético — propulsión al máximo
@@ -238,6 +232,24 @@ export default function RocketState({ state = 'mid', size = 90 }) {
         </g>
       )}
 
+      {/* ── MID: llama moderada + chispas leves ── */}
+      {state === 'mid' && (
+        <g>
+          {/* llamas (más cortas que high) */}
+          <Flame d="M33,168 Q31,180 33,191 Q39,200 45,202 Q51,200 57,191 Q59,180 57,168 Z" fill="#FCDE5A" delay={0}    />
+          <Flame d="M36,168 Q34,177 37,186 Q41,194 45,196 Q49,194 53,186 Q56,177 54,168 Z" fill="#F2A623" delay={0.07} />
+          <Flame d="M39,168 Q38,174 40,181 Q43,187 45,189 Q47,187 50,181 Q52,174 51,168 Z" fill="#fff"    opacity={0.75} delay={0.12} />
+
+          {/* chispas leves */}
+          {[
+            { cx:40, cy:172, r:1.8, fill:'#FCDE5A', delay:0,    dx:-12, dy:18 },
+            { cx:50, cy:172, r:1.6, fill:'#FCDE5A', delay:0.2,  dx: 10, dy:16 },
+            { cx:37, cy:168, r:1.4, fill:'#F2A623', delay:0.1,  dx:-16, dy:10 },
+            { cx:53, cy:168, r:1.3, fill:'#F2A623', delay:0.28, dx: 14, dy: 8 },
+          ].map((s, i) => <Spark key={i} {...s} />)}
+        </g>
+      )}
+
       {/* ── HIGH: fuego, chispas, estrellas ── */}
       {state === 'high' && (
         <g>
@@ -256,21 +268,24 @@ export default function RocketState({ state = 'mid', size = 90 }) {
           <Star cx={82} cy={140} size={2}   delay={0.3}  />
 
           {/* llamas multicapa (de afuera hacia adentro) */}
-          <Flame d="M30,168 Q28,185 30,198 Q38,208 45,210 Q52,208 60,198 Q62,185 60,168 Z" fill="#FCDE5A" delay={0}    />
-          <Flame d="M33,168 Q31,182 34,194 Q40,204 45,206 Q50,204 56,194 Q59,182 57,168 Z" fill="#F2A623" delay={0.08} />
-          <Flame d="M36,168 Q35,178 38,188 Q42,196 45,198 Q48,196 52,188 Q55,178 54,168 Z" fill="#EF9F27" delay={0.05} />
-          <Flame d="M39,168 Q38,176 41,183 Q43,188 45,190 Q47,188 49,183 Q52,176 51,168 Z" fill="#fff" opacity={0.8} delay={0.1} />
+          <Flame d="M26,168 Q23,190 26,208 Q35,222 45,225 Q55,222 64,208 Q67,190 64,168 Z" fill="#FCDE5A" opacity={0.6} delay={0.03} />
+          <Flame d="M29,168 Q26,188 29,205 Q37,218 45,220 Q53,218 61,205 Q64,188 61,168 Z" fill="#FCDE5A" delay={0}    />
+          <Flame d="M32,168 Q29,184 32,199 Q39,211 45,213 Q51,211 58,199 Q61,184 58,168 Z" fill="#F2A623" delay={0.08} />
+          <Flame d="M36,168 Q34,178 37,191 Q41,201 45,203 Q49,201 53,191 Q56,178 54,168 Z" fill="#EF9F27" delay={0.05} />
+          <Flame d="M39,168 Q38,176 41,186 Q43,193 45,195 Q47,193 49,186 Q52,176 51,168 Z" fill="#fff" opacity={0.85} delay={0.1} />
 
           {/* chispas */}
           {[
-            { cx:38, cy:172, r:2.2, fill:'#FCDE5A', delay:0,    dx:-18, dy:22  },
-            { cx:52, cy:172, r:2,   fill:'#FCDE5A', delay:0.15, dx: 16, dy:20  },
-            { cx:35, cy:168, r:1.8, fill:'#F2A623', delay:0.08, dx:-22, dy:14  },
-            { cx:55, cy:168, r:1.6, fill:'#F2A623', delay:0.22, dx: 20, dy:12  },
-            { cx:42, cy:175, r:1.5, fill:'#fff',    delay:0.3,  dx:-10, dy:26  },
-            { cx:48, cy:175, r:1.4, fill:'#fff',    delay:0.38, dx:  8, dy:24  },
-            { cx:31, cy:165, r:1.3, fill:'#FCDE5A', delay:0.1,  dx:-28, dy: 8  },
-            { cx:59, cy:165, r:1.3, fill:'#FCDE5A', delay:0.25, dx: 26, dy:10  },
+            { cx:38, cy:172, r:2.5, fill:'#FCDE5A', delay:0,    dx:-22, dy:28  },
+            { cx:52, cy:172, r:2.3, fill:'#FCDE5A', delay:0.15, dx: 20, dy:26  },
+            { cx:34, cy:168, r:2,   fill:'#F2A623', delay:0.08, dx:-28, dy:18  },
+            { cx:56, cy:168, r:1.8, fill:'#F2A623', delay:0.22, dx: 26, dy:16  },
+            { cx:42, cy:176, r:1.7, fill:'#fff',    delay:0.3,  dx:-12, dy:32  },
+            { cx:48, cy:176, r:1.6, fill:'#fff',    delay:0.38, dx: 10, dy:30  },
+            { cx:30, cy:165, r:1.5, fill:'#FCDE5A', delay:0.1,  dx:-34, dy:10  },
+            { cx:60, cy:165, r:1.5, fill:'#FCDE5A', delay:0.25, dx: 32, dy:12  },
+            { cx:36, cy:180, r:1.3, fill:'#F2A623', delay:0.18, dx:-18, dy:36  },
+            { cx:54, cy:180, r:1.3, fill:'#F2A623', delay:0.42, dx: 16, dy:34  },
           ].map((s, i) => <Spark key={i} {...s} />)}
         </g>
       )}
